@@ -13,13 +13,20 @@ class Service(WebHookService):
     Visit the following URL for Slack configuration documentation:
     `https://my.slack.com/services/new/incoming-webhook`
     """
-    @listen_to('*.created')
+    @listen_to('*.*')
     def send(self, payload):
         options = self.options.copy()
 
         try:
             url = options.pop('url')
         except KeyError:
+            return
+
+        # Figure out which actions the user wants to be notified about.  We default to 'created' to support the prior
+        # Sprint.ly behavior.
+        notify_on_actions = options.get('notify_on_actions', ['created'])
+
+        if payload.get('action', 'created') not in notify_on_actions:
             return
 
         data = self.get_post_data(payload)

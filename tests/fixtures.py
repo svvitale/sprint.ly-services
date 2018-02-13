@@ -2,6 +2,7 @@
 Fixture data, uses real model data pulled down via the Django ORM
 and uses `wasatch.utils.model_to_json` with expand=True
 """
+import copy
 
 fake_product = {
     'admin': False,
@@ -108,6 +109,15 @@ fake_item_payload = {
         'type': 'defect'
     }
 }
+
+fake_item_created_payload = copy.deepcopy(fake_item_payload)
+fake_item_created_payload['action'] = 'created'
+
+fake_item_updated_payload = copy.deepcopy(fake_item_payload)
+fake_item_updated_payload['action'] = 'updated'
+
+fake_item_deleted_payload = copy.deepcopy(fake_item_payload)
+fake_item_deleted_payload['action'] = 'deleted'
 
 fake_block_payload = {
     'model': 'Block',
@@ -548,5 +558,8 @@ all_payloads = [
     fake_item_payload,
     fake_block_payload,
     fake_favorite_payload,
-    fake_deploy_payload
+    fake_deploy_payload,
+    fake_item_created_payload,
+    fake_item_updated_payload,
+    fake_item_deleted_payload
 ]
